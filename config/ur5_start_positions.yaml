@@ -1,0 +1,19 @@
+/**:
+  ros__parameters:
+    start_position:
+      joints:
+        - linear_motor_cursor_joint
+        - ur5_32_shoulder_pan_joint
+        - ur5_32_shoulder_lift_joint
+        - ur5_32_elbow_joint
+        - ur5_32_wrist_1_joint
+        - ur5_32_wrist_2_joint
+        - ur5_32_wrist_3_joint
+      values:
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0
+        - 0.0

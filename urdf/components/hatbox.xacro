@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+
+<!-- 09/03/2018-->
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  
+  <xacro:macro name="hatbox" params="link_name:=hatbox what:=hatbox *origin parent ">
+  <xacro:property name="scale" value="1"/>
+  <xacro:property name="mesh_type" value="stl"/>
+  
+<!--
+THREE LINKS ARE CREATED:
+1) THE FIRST IS THE HATBOX,
+2) THE SECOND THE HATBOX_BRACKET THAT IS JOINED TO HATBOX THROUGH A FIXED LINK
+3) THE THIRD IS THE HATBOX_GRASPING_APPROACHING THAT IS JOINED TO HATBOX THROUGH A FIXED LINK
+
+2 AND 3 ARE USED TO EASE THE TF OF BOTH THE REFERENCE SYSTEM
+-->
+  <link name="${link_name}">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.005"/>
+      <inertia ixx="0.05"  ixy="0"  ixz="0" iyy="0.06" iyz="0" izz="0.03" />
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+              <mesh filename="package://eureca_description/meshes/components/visual/hatbox.${mesh_type}" scale="${scale} ${scale} ${scale}"/>
+      </geometry>
+              <material name="Grey"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+              <mesh filename="package://eureca_description/meshes/components/collision/hatbox.${mesh_type}" scale="${scale} ${scale} ${scale}"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="${link_name}_bracket" />
+
+  <link name="${link_name}_grasping_approach" />
+
+<!--
+THREE FIXED JOINTS ARE CREATED ACCORDING TO THE ARGUMENT 'WHAT':
+a. if 'what' is  'hatbox' it does mean that HATBOX is fixed w.r.t the parent, while the HATBOX_BRACKET is therefore defined w.r.t the hatbox reference frame
+b. if 'what' is  'bracket' it does mean that HATBOX_BRACKET is fixed w.r.t the parent, while the HATBOX is therefore defined w.r.t the HATBOX_BRACKET reference frame
+-->
+  <xacro:if value="${ what == 'hatbox' }" >
+    <joint name="${parent}_${link_name}" type="fixed">
+        <xacro:insert_block name="origin"/>
+        <parent link="${parent}"/>
+        <child link="${link_name}"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+      
+    <joint name="${link_name}_bracket" type="fixed">
+        <origin xyz="0 -0.32 0.52" rpy="${10.0 * pi /180.0} 0 0 "/>
+        <parent link="${link_name}"/>
+        <child link="${link_name}_bracket"/>
+        <axis xyz="0 0 1"/>
+    </joint>  
+  </xacro:if>
+  
+  
+  <xacro:if value="${ what == 'bracket' }" >  
+
+    <joint name="${link_name}_bracket" type="fixed">
+        <origin xyz="0.000 0.225 -0.568" rpy="-${10.0 * pi /180.0} 0 0 "/>
+        <child  link="${link_name}"/>
+        <parent link="${link_name}_bracket"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+
+    <joint name="${parent}_${link_name}_bracket" type="fixed">
+        <xacro:insert_block name="origin"/>
+        <parent link="${parent}"/>
+        <child link="${link_name}_bracket"/>
+        <axis xyz="0 0 1"/>
+    </joint>
+  </xacro:if>
+
+   <joint name="${link_name}_grasping_approach" type="fixed">
+      <origin xyz="0 0.1 0" rpy="${10.0 * pi /180.0} 0 0 "/>
+      <parent link="${link_name}"/>
+      <child link="${link_name}_grasping_approach"/>
+      <axis xyz="0 0 1"/>
+  </joint>
+    
+</xacro:macro>
+  
+</robot>
+
+

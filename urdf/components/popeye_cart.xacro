@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<!-- 09/03/2018-->
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  
+	<xacro:arg name="pi" default="3.1415926535"/>
+
+	<xacro:macro name="popeye_cart" params="link_name parent *origin">
+    <xacro:property name="scale" value="1"/>
+    <xacro:property name="mesh_type" value="stl"/>
+
+    <link name="${link_name}">
+      <inertial>
+	    <origin xyz="0 0 0" rpy="0 0 0"/>
+	    <mass value="5"/>
+	    <inertia ixx="0.05"  ixy="0"  ixz="0" iyy="0.06" iyz="0" izz="0.03" />
+      </inertial>
+      <visual>
+	    <origin xyz="0 0 0" rpy="0 0 0"/>
+	    <geometry>
+	      <mesh filename="package://eureca_description/meshes/components/collision/popeye_cart.${mesh_type}" scale="${scale} ${scale} ${scale}"/>
+	    </geometry>
+	    <material name="Grey"/>
+      </visual>
+      <collision>
+	    <origin xyz="0 0 0" rpy="0 0 0"/>
+	    <geometry>
+	      <mesh filename="package://eureca_description/meshes/components/collision/popeye_cart.${mesh_type}" scale="${scale} ${scale} ${scale}"/>
+	    </geometry>
+	    <material name="Grey"/>
+      </collision>
+  </link>
+
+  <joint name="${parent}_${link_name}_joint" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${link_name}"/>
+      <axis xyz="0 0 1"/>
+  </joint>
+
+    
+  </xacro:macro>
+  
+</robot>
+
+

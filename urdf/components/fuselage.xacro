@@ -1,0 +1,98 @@
+<?xml version="1.0"?>
+
+<!-- 09/03/2018-->
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  
+  <xacro:macro name="fuselage" params="link_name:=fuselage model:=fuselage *origin parent ">
+  <xacro:property name="scale" value="1"/>
+  <xacro:property name="mesh_type" value="stl"/>
+  
+<!--
+A FEW LINKS:
+
+-->
+  <link name="${link_name}">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="0.005"/>
+      <inertia ixx="0.05"  ixy="0"  ixz="0" iyy="0.06" iyz="0" izz="0.03" />
+    </inertial>
+
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://eureca_description/meshes/components/visual/${model}.${mesh_type}" scale="${scale} ${scale} ${scale}"/>
+      </geometry>
+      <material name="Cyan">
+        <color rgba="0 1.0 1.0 0.6"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+              <mesh filename="package://eureca_description/meshes/components/visual/${model}.${mesh_type}" scale="${scale} ${scale} ${scale}"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- the approaching position to the bracket -->
+  <link name="${link_name}_hatbox_approach_1_A" />
+
+  <!-- the approaching position to the bracket -->
+  <link name="${link_name}_hatbox_approach_1_B" />
+
+  <!-- the position of the bracket in the fuselage -->
+  <link name="${link_name}_hatbox_bracket_1"    />
+
+  <!-- the final hatbox pose, the link will be in the bracket, with the correct orientation to finalize the assembly -->
+  <link name="${link_name}_hatbox_final_1"      />
+
+<!--
+A FEW JOINTS
+-->
+
+  <joint name="${parent}_${link_name}" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${link_name}"/>
+      <axis xyz="0 0 1"/>
+   </joint>
+
+
+   <joint name="${link_name}_hatbox_bracket_1" type="fixed">
+      <origin xyz="4.15 -0.87 1.95" rpy="${-10.0*pi/180.0} 0 ${pi}"/>
+      <parent link="${link_name}"/>
+      <child link="${link_name}_hatbox_bracket_1"/>
+      <axis xyz="0 0 1"/>
+  </joint>
+   
+
+   <joint name="${link_name}_hatbox_approach_1_A" type="fixed">
+      <origin xyz="0 -0.075 0.010" rpy="${5*pi/180.0} 0 0"/>
+      <parent link="${link_name}_hatbox_bracket_1"/>
+      <child link="${link_name}_hatbox_approach_1_A"/>
+      <axis xyz="0 0 1"/>
+  </joint>
+  
+
+  <joint name="${link_name}_hatbox_approach_1_B" type="fixed">
+      <origin xyz="0  0.0 0.010" rpy="${ 0 * pi/180.0} 0 0"/>
+      <parent link="${link_name}_hatbox_bracket_1"/>
+      <child link="${link_name}_hatbox_approach_1_B"/>
+      <axis xyz="0 0 1"/>
+  </joint>
+  
+
+   <joint name="${link_name}_hatbox_final_1" type="fixed">
+      <origin xyz="0.0 0.0 0.0" rpy="${7.5*pi/180.0} 0 0"/>
+      <parent link="${link_name}_hatbox_bracket_1"/>
+      <child link="${link_name}_hatbox_final_1"/>
+      <axis xyz="0 0 1"/>
+  </joint>
+    
+  </xacro:macro>
+  
+</robot>
+
+

@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+
+<!-- 09/03/2018-->
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  
+	<xacro:macro name="hatbox_clamper" params="link_name:=hatbox_clamper what:=complete *origin parent ">
+    <xacro:property name="scale" value="1"/>
+    <xacro:property name="mesh_type" value="stl"/>
+  
+    <link name="${link_name}_fix_cad">
+	    <inertial>
+		    <origin xyz="0 0 0" rpy="0 0 0"/>
+		    <mass value="0.005"/>
+		    <inertia ixx="0.05"  ixy="0"  ixz="0" iyy="0.06" iyz="0" izz="0.03" />
+	    </inertial>
+
+	    <visual>
+		    <origin xyz="0 0 0" rpy="0 0 0"/>
+		    <geometry>
+              <mesh filename="package://eureca_description/meshes/components/visual/popeye_gripper_fix_part.${mesh_type}" scale="${scale} ${scale} ${scale}"/>
+		    </geometry>
+		    <material name="Orange"/>
+	    </visual>
+	    <collision>
+		    <origin xyz="0 0 0" rpy="0 0 0"/>
+		    <geometry>
+              <mesh filename="package://eureca_description/meshes/components/collision/popeye_gripper_fix_part.${mesh_type}" scale="${scale} ${scale} ${scale}"/>
+		    </geometry>
+	    </collision>
+    </link>
+    
+<xacro:if value="${what == 'complete' }" >
+    <link name="${link_name}_moveable">
+	    <inertial>
+		    <origin xyz="0 0 0" rpy="0 0 0"/>
+		    <mass value="0.005"/>
+		    <inertia ixx="0.05"  ixy="0"  ixz="0" iyy="0.06" iyz="0" izz="0.03" />
+	    </inertial>
+
+	    <visual>
+		    <origin xyz="0 0 0" rpy="0 0 0"/>
+		    <geometry>
+              <mesh filename="package://eureca_description/meshes/components/visual/popeye_gripper_moveable_part.${mesh_type}" scale="${scale} ${scale} ${scale}"/>
+		    </geometry>
+		    <material name="Orange"/>
+	    </visual>
+	    <collision>
+		    <origin xyz="0 0 0" rpy="0 0 0"/>
+		    <geometry>
+              <mesh filename="package://eureca_description/meshes/components/collision/popeye_gripper_moveable_part.${mesh_type}" scale="${scale} ${scale} ${scale}"/>
+		    </geometry>
+	    </collision>
+    </link>
+</xacro:if>
+
+
+    <link name="${link_name}" />
+
+    <joint name="${parent}_${link_name}_fix_cad" type="fixed">
+      <xacro:insert_block name="origin"/>
+      <parent link="${parent}"/>
+      <child link="${link_name}_fix_cad"/>
+      <axis xyz="0 0 1"/>
+    </joint>
+
+   <joint name="${parent}_${link_name}" type="fixed">
+      <!--origin xyz="0.12 -0.230 0 " rpy="${-pi} ${-pi/2} 0"/-->
+      <origin xyz="0.04 -0.230 0 " rpy="${-pi} ${-pi/2} 0"/>
+      <parent link="${link_name}_fix_cad"/>
+      <child link="${link_name}"/>
+      <axis xyz="0 0 1"/>
+  </joint>
+
+<xacro:if value="${what == 'complete' }" >
+
+   <joint name="${link_name}_joint" type="fixed">
+      <origin xyz="0.202 0.447 0 " rpy="${-pi/2} 0   ${pi/2}"/>
+      <parent link="${link_name}_fix_cad"/>
+      <child link="${link_name}_moveable"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="10000.0" lower="${-1/6*pi}" upper="${1/6*pi}" velocity="0.5"/>
+  </joint>
+</xacro:if>
+
+
+<link name="${link_name}_bracket" />
+<joint name="${link_name}_bracket" type="fixed">
+  <origin xyz="0 -0.230 0.52" rpy="0 0 0 "/>
+  <parent link="${link_name}"/>
+  <child link="${link_name}_bracket"/>
+  <axis xyz="0 0 1"/>
+</joint>  
+    
+  </xacro:macro>
+  
+</robot>
+
+

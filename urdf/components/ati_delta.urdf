@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<!-- 09/03/2018-->
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  
+  <xacro:arg name="pi" default="3.1415926535"/>
+  
+  <xacro:macro name="ati_delta">
+  
+    <link name="ati_flange">
+
+      <inertial>
+        <origin xyz="0 0 -0.1" rpy="0 0 0"/>
+        <mass value="0.005"/>
+        <inertia ixx="0.05"  ixy="0"  ixz="0" iyy="0.06" iyz="0" izz="0.03" />
+      </inertial>
+
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://eureca_description/meshes/popeye/visual/ati_delta.dae"/>
+        </geometry>
+        <material name="Orange"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="package://eureca_description/meshes/popeye/visual/ati_delta.dae"/>
+        </geometry>
+        <material name="Orange"/>
+      </collision>
+    </link>
+    
+  </xacro:macro>
+  
+</robot>
+
+

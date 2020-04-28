@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<robot name="eureca" xmlns:xacro="http://ros.org/wiki/xacro">
+
+<!--   <xacro:include filename="$(find eureca_description)/urdf/sweepee/sweepee.gazebo.xacro" /> -->
+  <xacro:include filename="$(find ros2_assembly)/urdf/sweepee/sweepee.xacro" />
+  
+<!-- common stuff -->
+  <xacro:include filename="$(find ur_description)/urdf/common.gazebo.xacro" />
+
+  <!-- ur10 -->
+  <xacro:include filename="$(find ur_description)/urdf/ur10.urdf.xacro" />
+  
+  <xacro:property name="M_PI" value="3.14159"/>
+
+  <xacro:sweepee robot_namespace="/" >
+    <origin xyz="0 0 0" rpy="0 0 0" />
+  </xacro:sweepee>
+
+
+  <!-- arm -->
+  <xacro:ur10_robot prefix="" joint_limited="false"
+    transmission_hw_interface="hardware_interface/PositionJointInterface"
+  />
+
+  <link name="world" />
+
+  <joint name="world_joint" type="fixed">
+    <parent link="base_footprint" />
+    <child link = "base_link" />
+    <origin xyz="0.0 0.0 0.30" rpy="0.0 0.0 0.0" />
+  </joint>
+
+
+
+  
+</robot>

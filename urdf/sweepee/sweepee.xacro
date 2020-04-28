@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+
+<robot name="eureca" xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:include filename="$(find ros2_assembly)/urdf/sick_lms1xx.urdf.xacro" />
+  <xacro:include filename="$(find ros2_assembly)/urdf/sweepee/camera.urdf.xacro" />
+
+  <xacro:property name="M_PI" value="3.14159"/>
+
+
+  <!-- Base Size -->
+  <xacro:property name="base_x_size" value="1.02" />
+  <xacro:property name="base_y_size" value="0.55" />
+  <xacro:property name="base_z_size" value="0.15" />
+
+  
+  <xacro:macro name="sweepee" params="robot_namespace *origin">
+  
+	  <sick_lms1xx frame="rear_laser" topic="scan/rear" min_angle="${-M_PI/2}" max_angle="${M_PI/2}" sample_size="720" robot_namespace="${robot_namespace}"/>
+    <sick_lms1xx frame="front_laser" topic="scan/front" min_angle="${-M_PI/2}" max_angle="${M_PI/2}" sample_size="720" robot_namespace="${robot_namespace}"/>
+
+    <!-- Base footprint is on the ground under the robot -->
+    <link name="base_footprint">
+      <inertial>
+          <mass value="0.1" />
+          <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001" />
+      </inertial>
+    </link>  
+    <!-- Base link is the center of the robot's bottom plate -->
+    <link name="base_link">
+      <visual>
+        <origin xyz="0 0 0.032" rpy="0 0 -${M_PI/2}" />
+        <geometry>
+          <mesh filename="package://ros2_assembly/meshes/sweepee/visual/sweepee.dae"/>
+        </geometry>
+        <material name="Gray">
+          <color rgba="0.5 0.5 0.5 1.0" />
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 ${base_z_size/2}" rpy="0 0 0" />
+        <geometry>
+          <box size="${base_x_size+0.14} ${base_y_size+0.08} ${base_z_size}"/>
+        </geometry>
+      </collision>
+      <inertial>
+          <mass value="40" />
+          <inertia ixx="1.48454" ixy="0.0" ixz="0.0" iyy="3.02861" iyz="0.0" izz="4.10178" />
+      </inertial>
+    </link>
+
+
+    <joint name="base_footprint_joint" type="fixed">
+      <xacro:insert_block name="origin"/> 
+      <parent link="base_footprint" />
+      <child link="base_link" />
+      <dynamics damping="0.7"/>
+    </joint>
+
+
+    <joint name="front_laser_joint" type="fixed">
+      <!-- This offset is from the base of the bracket to the LIDAR's focal point. -->
+      <origin xyz="${base_x_size/2-0.15} 0.0 ${base_z_size/2+0.085}" rpy="0 0 0" />
+      <parent link="base_link" />
+      <child link="front_laser" />
+    </joint>
+
+    
+    <joint name="rear_laser_joint" type="fixed">
+      <origin xyz="${-base_x_size/2+0.15} 0.0 ${base_z_size/2+0.085}" rpy="0 0 ${M_PI}" />
+      <parent link="base_link" />
+      <child link="rear_laser" />
+    </joint>
+
+
+    <joint name="camera_joint" type="fixed">
+      <origin xyz="${-base_x_size/2+0.25} 0.0 ${base_z_size/2+0.15}" rpy="0 0 0" />
+      <parent link="base_link" />
+      <child link="camera" />
+      </joint>
+  
+    
+    <fake_camera />
+  </xacro:macro>
+
+</robot>
