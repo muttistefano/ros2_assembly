@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/opt/ros/eloquent/include/",
+                "/home/kolmogorov/ros2/moveit_ros2/install/moveit_ros_planning_interface/include/",
+                "/home/kolmogorov/ros2/moveit_ros2/install/moveit_core/include/",
+                "/home/kolmogorov/ros2/moveit_ros2/install/moveit_ros_planning_interface/include/",
+                "/home/kolmogorov/ros2/moveit_ros2/install/moveit_ros_planning/include/",
+                "/home/kolmogorov/ros2/moveit_ros2/install/**"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang-6.0",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}

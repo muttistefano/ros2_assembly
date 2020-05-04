@@ -10,7 +10,10 @@
 
   <!-- ur10 -->
   <xacro:include filename="$(find ur_description)/urdf/ur10.urdf.xacro" />
-  
+
+  <xacro:include filename="$(find ros2_assembly)/urdf/components/fuselage.xacro"/>
+
+
   <xacro:property name="M_PI" value="3.14159"/>
 
   <xacro:sweepee robot_namespace="/" >
@@ -33,6 +36,11 @@
 
   <link name="world"/>
 
+  <joint name="world_sweepee" type="floating">
+    <parent link="world" />
+    <child link = "base_footprint" />
+  </joint>
+
   <xacro:include filename="$(find ur5_on_guide_description)/urdf/ur5_on_guide.urdf.xacro" />
   <xacro:ur5_on_guide/>
 
@@ -42,6 +50,10 @@
     <origin xyz="0 0 0.0" rpy="0 0 0" />
   </joint>
 
+
+  <xacro:fuselage link_name="fuselage" parent="world" model="fuselage_nopanelfixing" >
+      <origin xyz="-4.2672  0 0.095" rpy="0 0 0" />
+  </xacro:fuselage>
 
 
   

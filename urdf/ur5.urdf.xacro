@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<robot name="eureca" xmlns:xacro="http://ros.org/wiki/xacro">
+<robot name="ur5" xmlns:xacro="http://ros.org/wiki/xacro">
 
 
 
